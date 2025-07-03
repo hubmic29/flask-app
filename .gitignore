@@ -1,0 +1,16 @@
+# Python
+__pycache__/
+*.pyc
+
+# Flask / baza
+instance/
+*.db
+.env
+
+# Edytory
+.vscode/
+.idea/
+
+# Systemowe
+.DS_Store
+Thumbs.db

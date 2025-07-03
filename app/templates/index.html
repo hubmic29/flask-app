@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Real-Time ToDo</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-LN+7fdVzj6u52u30Kp6M/trliBMCMKTyK833zpbD+pXdCLuTusPj697FH4R/5mcr" crossorigin="anonymous">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.7.2/socket.io.min.js"></script>
+</head>
+
+<body>
+    <ul class="nav justify-content-center">
+        <li class="nav-item">
+            <a class="nav-link active" aria-current="page" href="#" style="font-size: 30px;">Shopping</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="#" style="font-size: 30px;">ToDo</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="#" style="font-size: 30px;">Important</a>
+        </li>
+    </ul>
+
+    <input id="task-input" placeholder="New task..." />
+    <button onclick="sendTask()">Add</button>
+
+    <ul id="task-list">
+        {% for task in tasks %}
+        <li>{{ task.text }}</li>
+        {% endfor %}
+    </ul>
+
+    <script>
+        const socket = io();
+        const input = document.getElementById('task-input');
+        const list = document.getElementById('task-list');
+
+        function sendTask() {
+            const task = input.value.trim();
+            if (!task) return;
+            socket.emit('new_task', { text: task });
+            input.value = '';
+        }
+
+        socket.on('broadcast_task', data => {
+            const li = document.createElement('li');
+            li.textContent = data.text;
+            list.appendChild(li);
+        });
+
+        socket.on('connect', () => {
+            console.log("✅ Connected to Socket.IO server");
+        });
+    </script>
+
+    <a href="/logout" class="btn btn-danger mt-3">Logout</a>
+
+
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-ndDqU0Gzau9qJ1lfW4pNLlhNTkCfHzAVBReH9diLvGRem5+R9g2FzA8ZGN954O5Q"
+        crossorigin="anonymous"></script>
+</body>
+
+</html>
