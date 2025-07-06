@@ -10,11 +10,33 @@
             input.value = '';
         }
 
-        socket.on("broadcast_task", data => {
-    const list = document.getElementById(`${data.category}-list`);
-    const li = document.createElement('li');
-    li.textContent = data.text;
-    list.appendChild(li);
+        socket.on("broadcast_task", (data) => {
+    const listId = {
+        shopping: "shopping-list",
+        todo: "todo-list",
+        important: "important-list"
+    }[data.category];
+
+    if (!listId) return;
+
+    const ul = document.getElementById(listId);
+
+    const li = document.createElement("li");
+    li.className = "textContent";
+    li.setAttribute("data-id", data.id);
+    li.innerHTML = `
+        <div class="box1">${data.text}</div>
+        <div class="box2">
+           <button class="btn btn-sm btn-danger"
+    onclick="deleteTask('${data.id}')">❌</button>
+
+        </div>
+        <div class="box3">
+            <small>${data.user_id}</small>
+        </div>
+    `;
+
+    ul.appendChild(li);
 });
 
 
@@ -57,23 +79,24 @@
         }
 
 
-        function deleteTask(taskText) {
-            socket.emit('delete_task', { text: taskText });
-        }
-        socket.on('task_deleted', data => {
-            const items = document.querySelectorAll('#task-list li');
-            for (let item of items) {
-                if (item.textContent.includes(data.text)) {
-                    item.remove();
-                    break;
-                }
-            }
-        });
-
-        function sendTask(category) {
-    const input = document.getElementById(`input-${category}`);
-    const task = input.value.trim();
-    if (!task) return;
-    socket.emit('new_task', { text: task, category: category });
-    input.value = '';
+        function deleteTask(id) {
+    socket.emit("delete_task", { id: id });
 }
+        socket.on("task_deleted", (data) => {
+    const el = document.querySelector(`[data-id='${data.id}']`);
+    if (el) el.remove();
+});
+
+     function sendTask(category) {
+    const input = document.getElementById(`input-${category}`);
+    const text = input.value.trim();
+    if (!text) return;
+
+    socket.emit("new_task", {
+        text: text,
+        category: category
+    });
+
+    input.value = "";
+}
+

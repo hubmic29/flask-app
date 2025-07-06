@@ -40,19 +40,24 @@ def handle_new_task(data):
 
     socketio.emit(
         "broadcast_task",
-        {"text": task_text, "user_id": current_user.id, "category": category},
+        {
+            "id": new_task.id,
+            "text": task_text,
+            "user_id": current_user.id,
+            "category": category,
+        },
     )
 
 
 @socketio.on("delete_task")
 def handle_delete_task(data):
-    task_text = data.get("text")
+    task_id = data.get("id")
+    task = Task.query.get(task_id)
 
-    task = Task.query.filter_by(text=task_text).first()
     if task:
         db.session.delete(task)
         db.session.commit()
-        socketio.emit("task_deleted", {"text": task_text})
+        socketio.emit("task_deleted", {"id": task_id})
 
 
 @main.route("/login", methods=["GET", "POST"])
