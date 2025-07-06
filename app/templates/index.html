@@ -6,6 +6,7 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-LN+7fdVzj6u52u30Kp6M/trliBMCMKTyK833zpbD+pXdCLuTusPj697FH4R/5mcr" crossorigin="anonymous">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.7.2/socket.io.min.js"></script>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
 </head>
 
 <body>
@@ -21,42 +22,100 @@
         </li>
     </ul>
 
-    <input id="task-input" placeholder="New task..." />
+
+    <!-- <input id="task-input" placeholder="New task..." />
     <button onclick="sendTask()">Add</button>
 
     <ul id="task-list">
         {% for task in tasks %}
-        <li>{{ task.text }}</li>
+        <li class="textContent">
+            <div class="box1">{{ task.text }}</div>
+            <div class="box2">
+                <button class="btn btn-sm btn-danger" onclick="deleteTask('{{ task.text }}')">❌</button>
+            </div>
+            <div class="box3">
+                <small>{{ task.user_id }}</small>
+            </div>
+        </li>
         {% endfor %}
-    </ul>
+    </ul> -->
+    <div class="container mt-4">
+        <div class="row">
+            <div class="col-12 col-md-4 mb-3">
+                <div class="column-box">Shopping
+                    <div class="center-list">
+                        <input id="input-shopping" placeholder="New task..." />
+                        <button onclick="sendTask('shopping')">Add</button>
 
-    <script>
-        const socket = io();
-        const input = document.getElementById('task-input');
-        const list = document.getElementById('task-list');
+                        <ul id="shopping-list">
+                            {% for task in shopping_tasks %}
+                            <li class="textContent">
+                                <div class="box1">{{ task.text }}</div>
+                                <div class="box2">
+                                    <button class="btn btn-sm btn-danger"
+                                        onclick="deleteTask('{{ task.text }}')">❌</button>
+                                </div>
+                                <div class="box3">
+                                    <small>{{ task.user_id }}</small>
+                                </div>
+                            </li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="col-12 col-md-4 mb-3">
+                <div class="column-box">ToDo
+                    <div>
+                        <input id="input-todo" placeholder="New task..." />
+                        <button onclick="sendTask('todo')">Add</button>
+                        <ul id="todo-list">
+                            {% for task in todo_tasks %}
+                            <li class="textContent">
 
-        function sendTask() {
-            const task = input.value.trim();
-            if (!task) return;
-            socket.emit('new_task', { text: task });
-            input.value = '';
-        }
+                                <div class="box1">{{ task.text }}</div>
+                                <div class="box2">
+                                    <button class="btn btn-sm btn-danger"
+                                        onclick="deleteTask('{{ task.text }}')">❌</button>
+                                </div>
+                                <div class="box3">
+                                    <small>{{ task.user_id }}</small>
+                                </div>
+                            </li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="col-12 col-md-4 mb-3">
+                <div class="column-box">Important
+                    <div>
+                        <input id="input-important" placeholder="New task..." />
+                        <button onclick="sendTask('important')">Add</button>
+                        <ul id="important-list">
+                            {% for task in important_tasks %}
+                            <li class="textContent">
 
-        socket.on('broadcast_task', data => {
-            const li = document.createElement('li');
-            li.textContent = data.text;
-            list.appendChild(li);
-        });
-
-        socket.on('connect', () => {
-            console.log("✅ Connected to Socket.IO server");
-        });
-    </script>
-
+                                <div class="box1">{{ task.text }}</div>
+                                <div class="box2">
+                                    <button class="btn btn-sm btn-danger"
+                                        onclick="deleteTask('{{ task.text }}')">❌</button>
+                                </div>
+                                <div class="box3">
+                                    <small>{{ task.user_id }}</small>
+                                </div>
+                            </li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
     <a href="/logout" class="btn btn-danger mt-3">Logout</a>
 
 
-
+    <script src="{{ url_for('static', filename='main.js') }}"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-ndDqU0Gzau9qJ1lfW4pNLlhNTkCfHzAVBReH9diLvGRem5+R9g2FzA8ZGN954O5Q"
         crossorigin="anonymous"></script>

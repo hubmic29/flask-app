@@ -12,3 +12,4 @@ class Task(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     text = db.Column(db.String(200), nullable=False)
     user_id = db.Column(db.Integer, db.ForeignKey("user.id"))
+    category = db.Column(db.String(20), nullable=False)

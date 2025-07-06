@@ -17,19 +17,42 @@ def load_user(user_id):
 @main.route("/")
 @login_required
 def index():
-    tasks = Task.query.all()  # or filter by current_user.id
-    return render_template("index.html", tasks=tasks)
+    shopping = Task.query.filter_by(category="shopping").all()
+    todo = Task.query.filter_by(category="todo").all()
+    important = Task.query.filter_by(category="important").all()
+
+    return render_template(
+        "index.html",
+        shopping_tasks=shopping,
+        todo_tasks=todo,
+        important_tasks=important,
+    )
 
 
 @socketio.on("new_task")
 def handle_new_task(data):
     task_text = data.get("text")
+    category = data.get("category")
 
-    new_task = Task(text=task_text, user_id=current_user.id)
+    new_task = Task(text=task_text, user_id=current_user.id, category=category)
     db.session.add(new_task)
     db.session.commit()
 
-    socketio.emit("broadcast_task", {"text": task_text})
+    socketio.emit(
+        "broadcast_task",
+        {"text": task_text, "user_id": current_user.id, "category": category},
+    )
+
+
+@socketio.on("delete_task")
+def handle_delete_task(data):
+    task_text = data.get("text")
+
+    task = Task.query.filter_by(text=task_text).first()
+    if task:
+        db.session.delete(task)
+        db.session.commit()
+        socketio.emit("task_deleted", {"text": task_text})
 
 
 @main.route("/login", methods=["GET", "POST"])

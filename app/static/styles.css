@@ -1,0 +1,52 @@
+.textContent {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    margin: 5px auto;
+    max-width: 100%;
+    word-wrap: break-word;
+}
+
+.box1 {
+    flex: 7;
+    border: #201f1f 2px solid;
+    border-radius: 5px;
+    padding: 8px;
+    overflow-wrap: break-word;
+    word-break: break-word;
+    background-color: white;
+}
+
+.box2 {
+    flex: 0 0 auto;
+    background-color: lightcoral;
+}
+
+.box3 {
+    flex: 0 0 auto;
+    background-color: brown;
+    padding: 4px;
+    color: white;
+    text-align: center;
+    min-width: 30px;
+    border-radius: 5px;
+}
+
+ul {
+    padding: 0;
+    list-style-type: none;
+    margin: 0;
+}
+
+.column-box {
+    border: 1px solid #ccc;
+    padding: 20px;
+    min-height: 200px;
+    text-align: center;
+    background-color: #f9f9f9;
+    word-break: break-word;
+}
+
+input {
+    max-width: 100%;
+}

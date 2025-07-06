@@ -4,11 +4,14 @@ from flask_login import LoginManager
 from flask_socketio import SocketIO
 import os
 from dotenv import load_dotenv
+from flask_migrate import Migrate
 
 load_dotenv()
 db = SQLAlchemy()
 login_manager = LoginManager()
 socketio = SocketIO()
+
+migrate = Migrate()
 
 
 def create_app():
