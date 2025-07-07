@@ -3,6 +3,7 @@
 
 <head>
     <title>Real-Time ToDo</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-LN+7fdVzj6u52u30Kp6M/trliBMCMKTyK833zpbD+pXdCLuTusPj697FH4R/5mcr" crossorigin="anonymous">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.7.2/socket.io.min.js"></script>
@@ -10,115 +11,153 @@
 </head>
 
 <body>
-    <ul class="nav justify-content-center">
-        <li class="nav-item">
-            <a class="nav-link active" aria-current="page" href="#" style="font-size: 30px;">Shopping</a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link" href="#" style="font-size: 30px;">ToDo</a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link" href="#" style="font-size: 30px;">Important</a>
-        </li>
-    </ul>
+    <div class="background-fixed">
+        <nav class="navbar">
+            <div class="logo"> Bubu & Dudu</div>
+            <div class="navtoggle" id="navtoggle">&#9776;</div>
+            <ul class="nav-links" id="nav-links">
+                <li><a href="#shopping">Shopping</a></li>
+                <li><a href="#todo">ToDo</a></li>
+                <li><a href="#important">Important</a></li>
+            </ul>
+        </nav>
 
 
-    <!-- <input id="task-input" placeholder="New task..." />
-    <button onclick="sendTask()">Add</button>
 
-    <ul id="task-list">
-        {% for task in tasks %}
-        <li class="textContent">
-            <div class="box1">{{ task.text }}</div>
-            <div class="box2">
-                <button class="btn btn-sm btn-danger" onclick="deleteTask('{{ task.text }}')">❌</button>
-            </div>
-            <div class="box3">
-                <small>{{ task.user_id }}</small>
-            </div>
-        </li>
-        {% endfor %}
-    </ul> -->
-    <div class="container mt-4">
-        <div class="row">
-            <div class="col-12 col-md-4 mb-3">
-                <div class="column-box">Shopping
+        <script>
+            const navtoggle = document.getElementById("navtoggle");
+            const navLinks = document.getElementById("nav-links");
+
+            navtoggle.addEventListener("click", () => {
+                navLinks.classList.toggle("show");
+            });
+        </script>
+
+        <div class="task-columns">
+            <section id="shopping" class="section">
+
+                <div class="column-box" id="column-title">Shopping
                     <div class="center-list">
-                        <input id="input-shopping" placeholder="New task..." />
-                        <button onclick="sendTask('shopping')">Add</button>
+                        <div class="input-wrapper">
+                            <input id="input-shopping" placeholder="New task..." />
+                            <button class="add-button" onclick="sendTask('shopping')">Add</button>
+                        </div>
+
 
                         <ul id="shopping-list">
                             {% for task in shopping_tasks %}
-                            <li class="textContent">
+                            <li class="textContent" data-id="{{ task.id }}">
+
+
                                 <div class="box1">{{ task.text }}</div>
                                 <div class="box2">
-                                    <button class="btn btn-sm btn-danger"
-                                        onclick="deleteTask('{{ task.text }}')">❌</button>
+                                    <button class="delete-button" onclick="deleteTask('{{ task.id }}')">❌</button>
+
+
+
                                 </div>
                                 <div class="box3">
-                                    <small>{{ task.user_id }}</small>
+                                    {% if task.user_id == 1 %}
+                                    <img src="{{ url_for('static', filename='img/user1.png') }}" alt="User 1" width="24"
+                                        height="24">
+                                    {% elif task.user_id == 2 %}
+                                    <img src="{{ url_for('static', filename='img/user2.png') }}" alt="User 2" width="24"
+                                        height="24">
+                                    {% else %}
+                                    <span>❓</span>
+                                    {% endif %}
                                 </div>
                             </li>
                             {% endfor %}
                         </ul>
                     </div>
                 </div>
-            </div>
-            <div class="col-12 col-md-4 mb-3">
-                <div class="column-box">ToDo
-                    <div>
+
+            </section>
+            <section id="todo" class="section">
+
+                <div class="column-box" id="column-title">ToDo
+                    <div class="center-list">
+                        <div class="input-wrapper">
                         <input id="input-todo" placeholder="New task..." />
-                        <button onclick="sendTask('todo')">Add</button>
+                        <button class="add-button" onclick="sendTask('todo')">Add</button>
+                        </div>
                         <ul id="todo-list">
                             {% for task in todo_tasks %}
-                            <li class="textContent">
+                            <li class="textContent" data-id="{{ task.id }}">
+
 
                                 <div class="box1">{{ task.text }}</div>
                                 <div class="box2">
-                                    <button class="btn btn-sm btn-danger"
-                                        onclick="deleteTask('{{ task.text }}')">❌</button>
+                                    <button class="delete-button" onclick="deleteTask('{{ task.id }}')">❌</button>
+
+
                                 </div>
                                 <div class="box3">
-                                    <small>{{ task.user_id }}</small>
+                                    {% if task.user_id == 1 %}
+                                    <img src="{{ url_for('static', filename='img/user1.png') }}" alt="User 1" width="24"
+                                        height="24">
+                                    {% elif task.user_id == 2 %}
+                                    <img src="{{ url_for('static', filename='img/user2.png') }}" alt="User 2" width="24"
+                                        height="24">
+                                    {% else %}
+                                    <span>❓</span>
+                                    {% endif %}
                                 </div>
                             </li>
                             {% endfor %}
                         </ul>
                     </div>
+
                 </div>
-            </div>
-            <div class="col-12 col-md-4 mb-3">
-                <div class="column-box">Important
-                    <div>
+            </section>
+            <section id="important">
+
+                <div class="column-box" id="column-title">Important
+                    <div class="center-list">
+                        <div class="input-wrapper">
                         <input id="input-important" placeholder="New task..." />
-                        <button onclick="sendTask('important')">Add</button>
+                        <button class="add-button" onclick="sendTask('important')">Add</button>
+                        </div>
                         <ul id="important-list">
                             {% for task in important_tasks %}
-                            <li class="textContent">
+                            <li class="textContent" data-id="{{ task.id }}">
+
 
                                 <div class="box1">{{ task.text }}</div>
                                 <div class="box2">
-                                    <button class="btn btn-sm btn-danger"
-                                        onclick="deleteTask('{{ task.text }}')">❌</button>
+                                    <button class="delete-button" onclick="deleteTask('{{ task.id }}')">❌</button>
+
                                 </div>
                                 <div class="box3">
-                                    <small>{{ task.user_id }}</small>
+                                    {% if task.user_id == 1 %}
+                                    <img src="{{ url_for('static', filename='img/user1.png') }}" alt="User 1" width="24"
+                                        height="24">
+                                    {% elif task.user_id == 2 %}
+                                    <img src="{{ url_for('static', filename='img/user2.png') }}" alt="User 2" width="24"
+                                        height="24">
+                                    {% else %}
+                                    <span>❓</span>
+                                    {% endif %}
                                 </div>
                             </li>
                             {% endfor %}
                         </ul>
                     </div>
                 </div>
-            </div>
+            </section>
+             <a href="/logout" class="logout-button">Logout</a>
         </div>
+
+
+       
+
+
+        <script src="{{ url_for('static', filename='main.js') }}"></script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-ndDqU0Gzau9qJ1lfW4pNLlhNTkCfHzAVBReH9diLvGRem5+R9g2FzA8ZGN954O5Q"
+            crossorigin="anonymous"></script>
     </div>
-    <a href="/logout" class="btn btn-danger mt-3">Logout</a>
-
-
-    <script src="{{ url_for('static', filename='main.js') }}"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-ndDqU0Gzau9qJ1lfW4pNLlhNTkCfHzAVBReH9diLvGRem5+R9g2FzA8ZGN954O5Q"
-        crossorigin="anonymous"></script>
 </body>
 
 </html>
