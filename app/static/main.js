@@ -49,6 +49,13 @@ socket.on("broadcast_task", (data) => {
     `;
 
     ul.appendChild(li);
+    gsap.from(li, {
+  y: -30,
+  opacity: 0,
+  scale: 0.9,
+  duration: 0.5,
+  ease: "back.out(1.7)"
+});
 });
 
 function deleteTask(id) {
@@ -57,5 +64,14 @@ function deleteTask(id) {
 
 socket.on("task_deleted", (data) => {
     const el = document.querySelector(`[data-id='${data.id}']`);
-    if (el) el.remove();
+    if (el) {
+    gsap.to(el, {
+      opacity: 0,
+      scale: 0.6,
+      y: 20,
+      duration: 0.3,
+      ease: "power1.in",
+      onComplete: () => el.remove()
+    });
+  }
 });

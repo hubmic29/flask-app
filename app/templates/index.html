@@ -36,7 +36,8 @@
         <div class="task-columns">
             <section id="shopping" class="section">
 
-                <div class="column-box" id="column-title">Shopping
+                <div class="column-box" id="column-title">
+                    <h1 class="shopping-text">Shopping</h1>
                     <div class="center-list">
                         <div class="input-wrapper">
                             <input id="input-shopping" placeholder="New task..." />
@@ -76,11 +77,12 @@
             </section>
             <section id="todo" class="section">
 
-                <div class="column-box" id="column-title">ToDo
+                <div class="column-box" id="column-title">
+                    <h1 class="todo-text">ToDo</h1>
                     <div class="center-list">
                         <div class="input-wrapper">
-                        <input id="input-todo" placeholder="New task..." />
-                        <button class="add-button" onclick="sendTask('todo')">Add</button>
+                            <input id="input-todo" placeholder="New task..." />
+                            <button class="add-button" onclick="sendTask('todo')">Add</button>
                         </div>
                         <ul id="todo-list">
                             {% for task in todo_tasks %}
@@ -113,11 +115,12 @@
             </section>
             <section id="important">
 
-                <div class="column-box" id="column-title">Important
+                <div class="column-box" id="column-title">
+                    <h1 class="important-text">Important</h1>
                     <div class="center-list">
                         <div class="input-wrapper">
-                        <input id="input-important" placeholder="New task..." />
-                        <button class="add-button" onclick="sendTask('important')">Add</button>
+                            <input id="input-important" placeholder="New task..." />
+                            <button class="add-button" onclick="sendTask('important')">Add</button>
                         </div>
                         <ul id="important-list">
                             {% for task in important_tasks %}
@@ -146,13 +149,16 @@
                     </div>
                 </div>
             </section>
-             <a href="/logout" class="logout-button">Logout</a>
+            <a href="/logout" class="logout-button">Logout</a>
         </div>
 
 
-       
 
 
+        <script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/gsap.min.js"></script>
+
+        <script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/SplitText.min.js"></script>
+        <script src="{{ url_for('static', filename='gsap.js') }}"></script>
         <script src="{{ url_for('static', filename='main.js') }}"></script>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"
             integrity="sha384-ndDqU0Gzau9qJ1lfW4pNLlhNTkCfHzAVBReH9diLvGRem5+R9g2FzA8ZGN954O5Q"
